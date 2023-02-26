@@ -1,0 +1,44 @@
+"use strict";
+exports.__esModule = true;
+exports.routes = void 0;
+var express_1 = require("express");
+var AuthenticateClientController_1 = require("./modules/account/useCases/authenticateClient/AuthenticateClientController");
+var AuthenticateDeliverymanController_1 = require("./modules/account/useCases/authenticateDeliveryman/AuthenticateDeliverymanController");
+var CreateClientController_1 = require("./modules/clients/useCases/createClient/CreateClientController");
+var CreateDeliverymanController_1 = require("./modules/deliveryman/useCases/createDeliveryman/CreateDeliverymanController");
+var CreateDeliveryController_1 = require("./modules/deliveries/useCases/createDelivery/CreateDeliveryController");
+var ensureAuthenticateClient_1 = require("./middlewares/ensureAuthenticateClient");
+var findAllAvailableDeliveriesController_1 = require("./modules/deliveries/useCases/findAllAvailableDeliveries/findAllAvailableDeliveriesController");
+var ensureAuthenticateDeliveryman_1 = require("./middlewares/ensureAuthenticateDeliveryman");
+var updateDeliverymanIdController_1 = require("./modules/deliveries/useCases/updateDelivery/updateDeliverymanIdController");
+var updateFinishedAtController_1 = require("./modules/deliveries/useCases/updateFinishedAt/updateFinishedAtController");
+var FindAllAvailableDeliveriesController_1 = require("./modules/clients/useCases/findAllAvailableDeliveries/FindAllAvailableDeliveriesController");
+var FindAllAvailableDeliveriesController_2 = require("./modules/deliveryman/useCases/findAllAvailableDeliveries/FindAllAvailableDeliveriesController");
+var RefreshTokenClientsController_1 = require("./modules/clients/useCases/refreshToken/RefreshTokenClientsController");
+var routes = (0, express_1.Router)();
+exports.routes = routes;
+var createClientController = new CreateClientController_1.CreateClientController();
+var createDeliverymanController = new CreateDeliverymanController_1.CreateDeliverymanController();
+var createDeliveryController = new CreateDeliveryController_1.CreateDeliveryController();
+var authenticateClientController = new AuthenticateClientController_1.AuthenticateClientController();
+var authenticateDeliverymanController = new AuthenticateDeliverymanController_1.AuthenticateDeliverymanController();
+var findAllAvailableDeliveriesController = new findAllAvailableDeliveriesController_1.FindAllAvailableDeliveriesController();
+var updateDeliverymanIdController = new updateDeliverymanIdController_1.UpdateDeliverymanIdController();
+var updateFinishedAtController = new updateFinishedAtController_1.UpdateFinishedAtController();
+var findAllAvailableClientDeliveriesController = new FindAllAvailableDeliveriesController_1.FindAllAvailableDeliveriesController();
+var findAllAvailableDeliverymanDeliveriesController = new FindAllAvailableDeliveriesController_2.FindAllAvailableDeliveriesController();
+var refreshTokenClientsController = new RefreshTokenClientsController_1.RefreshTokenClientsController();
+routes.post("/client", createClientController.handle);
+routes.post("/deliveryman", createDeliverymanController.handle);
+routes.post("/client/authenticate", authenticateClientController.handle);
+routes.post("/deliveryman/authenticate", authenticateDeliverymanController.handle);
+routes.post("/delivery", ensureAuthenticateClient_1.ensureAuthenticateClient, createDeliveryController.handle);
+routes.get("/delivery/available", ensureAuthenticateDeliveryman_1.ensureAuthenticateDeliveryman, findAllAvailableDeliveriesController.handle);
+routes.get("/client/deliveries", ensureAuthenticateClient_1.ensureAuthenticateClient, findAllAvailableClientDeliveriesController.handle);
+routes.get("/deliveryman/deliveries", ensureAuthenticateDeliveryman_1.ensureAuthenticateDeliveryman, findAllAvailableDeliverymanDeliveriesController.handle);
+routes.put("/delivery/update/deliveryman/:id", ensureAuthenticateDeliveryman_1.ensureAuthenticateDeliveryman, updateDeliverymanIdController.handle);
+routes.put("/delivery/update/finish/:id", ensureAuthenticateDeliveryman_1.ensureAuthenticateDeliveryman, updateFinishedAtController.handle);
+routes.post("/client/refresh/token", 
+// ensureAuthenticateClient,
+refreshTokenClientsController.handle);
+//# sourceMappingURL=routes.js.map
